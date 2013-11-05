@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/ProjectCream -Dhttp.port=${PORT} ${JAVA_OPTS}
+web: target/l/stage/bin/projectcream -Dhttp.port=${PORT} ${JAVA_OPTS}
