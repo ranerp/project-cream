@@ -1,14 +1,15 @@
 package controllers;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import play.*;
 import play.libs.F;
 import play.mvc.*;
 
 import views.html.*;
 
-import java.lang.reflect.Array;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+
 
 public class Application extends Controller {
 
@@ -21,7 +22,21 @@ public class Application extends Controller {
                 in.onMessage(new F.Callback<byte[]>() {
                     @Override
                     public void invoke(byte[] inPayload) throws Throwable {
-                        System.out.println(inPayload.length);
+
+                        byte[] header = new byte[256];
+                        for(int i = 0; i < header.length; i++) {
+                            header[i] = inPayload[i];
+                        }
+
+                        String headerStr = new String(header, "UTF-8");
+
+                        byte[] imgBytes = new byte[inPayload - header.length];
+                        for(int i = 0; i < inPayload.length; i++) {
+                            imgBytes[0] = inPayload[i + header.length];
+                        }
+
+                        BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgBytes));
+                        System.out.println(headerStr);
                     }
                 });
 
