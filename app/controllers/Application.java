@@ -20,8 +20,8 @@ public class Application extends Controller {
             public void onReady(WebSocket.In<byte[]> in, WebSocket.Out<byte[]> out) {
                 in.onMessage(new F.Callback<byte[]>() {
                     @Override
-                    public void invoke(byte[] s) throws Throwable {
-                        System.out.println(s.toString());
+                    public void invoke(byte[] inPayload) throws Throwable {
+                        System.out.println(inPayload.length);
                     }
                 });
 
@@ -33,12 +33,9 @@ public class Application extends Controller {
                 });
 
                 String str = "Hello android";
-                try {
-                    byte[] payload = Hex.decodeHex(str.toCharArray());
-                    out.write(payload);
-                } catch (DecoderException e) {
-                    System.out.println(e.toString());
-                }
+
+                out.write(str.getBytes());
+
             }
         };
     }
