@@ -36,6 +36,7 @@ public class Application extends Controller {
 
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgBytes));
                         System.out.println(headerStr);
+                        System.out.println("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
                     }
                 });
 
