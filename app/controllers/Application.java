@@ -29,8 +29,7 @@ public class Application extends Controller {
                         }
 
                         String headerStr = new String(header, "UTF-8");
-
-                        byte[] imgBytes = new byte[inPayload - header.length];
+                        byte[] imgBytes = new byte[inPayload.length - header.length];
                         for(int i = 0; i < inPayload.length; i++) {
                             imgBytes[0] = inPayload[i + header.length];
                         }
