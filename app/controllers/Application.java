@@ -22,7 +22,7 @@ public class Application extends Controller {
                 in.onMessage(new F.Callback<byte[]>() {
                     @Override
                     public void invoke(byte[] inPayload) throws Throwable {
-
+                        System.out.println("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
                         byte[] header = new byte[256];
                         for(int i = 0; i < header.length; i++) {
                             header[i] = inPayload[i];
@@ -36,7 +36,6 @@ public class Application extends Controller {
 
                         BufferedImage img = ImageIO.read(new ByteArrayInputStream(imgBytes));
                         System.out.println(headerStr);
-                        System.out.println("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
                     }
                 });
 
