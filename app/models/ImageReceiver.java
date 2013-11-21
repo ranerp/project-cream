@@ -27,7 +27,7 @@ public class ImageReceiver extends UntypedActor {
     private static ActorRef receiver = Akka.system().actorOf(Props.create(ImageReceiver.class));
 
     private static String basePath = Play.application().path().getPath();
-    private static String folderPath = basePath + "\\public\\images\\";
+    private static String folderPath = basePath + "\\tmp\\";
 
     public static void start(WebSocket.In<byte[]> in, WebSocket.Out<byte[]> out) throws Exception {
 
@@ -54,6 +54,8 @@ public class ImageReceiver extends UntypedActor {
         }
     }
     Map<String, BufferedOutputStream> senders = new HashMap<>();
+    Map<String, S3File> s3Instances = new HashMap<>();
+    Map<String, Integer> packageCounter = new HashMap<>();
 
     public void onReceive(Object message) throws Exception {
         if (message instanceof Start) {
@@ -63,6 +65,12 @@ public class ImageReceiver extends UntypedActor {
             if(!file.exists())
                 file.createNewFile();
 
+            S3File s3File = new S3File();
+            s3File.name = start.id;
+            s3File.file = file;
+
+            s3Instances.put(start.id, s3File);
+            packageCounter.put(start.id, 0);
 
             final int BUFFER_SIZE = 255 / 2 * 1024;
             FileOutputStream fileOutput = new FileOutputStream(file);
@@ -73,11 +81,25 @@ public class ImageReceiver extends UntypedActor {
         } else if (message instanceof Send) {
             Send send = (Send)message;
 
-            write(send.id, send.payload);
+            packageCounter.put(send.id, packageCounter.get(send.id) + 1);
+
+            if(packageCounter.get(send.id) == 1) {
+                String address = new String(send.payload);
+                s3Instances.get(send.id).address = new String(send.payload);
+            }
+            else
+                write(send.id, send.payload);
+
         } else if (message instanceof Quit) {
             Quit quit = (Quit)message;
+
             senders.get(quit.id).close();
             senders.remove(quit.id);
+
+            s3Instances.get(quit.id).save();
+            s3Instances.remove(quit.id);
+
+            Logger.debug("Connection: " + quit.id + " closed.");
         }
     }
 
