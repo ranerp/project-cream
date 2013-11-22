@@ -53,9 +53,9 @@ public class ImageReceiver extends UntypedActor {
             out.write(error.getBytes());
         }
     }
-    Map<String, BufferedOutputStream> senders = new HashMap<>();
-    Map<String, S3File> s3Instances = new HashMap<>();
-    Map<String, Integer> packageCounter = new HashMap<>();
+    Map<String, BufferedOutputStream> senders = new HashMap<String, BufferedOutputStream>();
+    Map<String, S3File> s3Instances = new HashMap<String, S3File>();
+    Map<String, Integer> packageCounter = new HashMap<String, Integer>();
 
     public void onReceive(Object message) throws Exception {
         if (message instanceof Start) {
