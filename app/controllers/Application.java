@@ -16,7 +16,7 @@ public class Application extends Controller {
 
 
     public static Result index() {
-        List<S3File> uploads = new Model.Finder<>(UUID.class, S3File.class).all();
+        List<S3File> uploads = new Model.Finder<UUID, S3File>(UUID.class, S3File.class).all();
         List<Integer> countUploads = new ArrayList<Integer>();
         for(int i = 0; i < uploads.size(); i++)
             countUploads.add(i);
